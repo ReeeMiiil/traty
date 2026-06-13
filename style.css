@@ -821,3 +821,235 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-size: 1.1rem;
     letter-spacing: -0.01em;
 }
+
+/* === Адаптив для смартфонов === */
+@media (max-width: 480px) {
+    .amount-display {
+        padding: 8px 0;
+    }
+
+    .amount-sign {
+        font-size: 2.4rem;
+    }
+
+    .amount-text {
+        font-size: 3.5rem;
+        min-height: 4rem;
+    }
+
+    .amount-currency {
+        font-size: 1.8rem;
+    }
+
+    .amount-display-expense,
+    .amount-display-income {
+        margin: 10px 8px;
+        padding: 8px;
+        border-width: 3px;
+    }
+
+    .numpad-btn {
+        width: min(80px, 26vw);
+        height: min(60px, 18vw);
+        border-radius: 20px;
+        font-size: 1.4rem;
+    }
+
+    .numpad-zero {
+        font-size: 1.2rem;
+        width: min(80px, 26vw);
+        height: min(60px, 18vw);
+        border-radius: 20px;
+    }
+
+    .numpad-dot {
+        font-size: 1.6rem;
+    }
+
+    .numpad-back {
+        font-size: 1.3rem;
+    }
+
+    .numpad-ok {
+        font-size: 1.4rem;
+    }
+
+    .numpad {
+        gap: 6px;
+    }
+
+    input {
+        font-size: 16px;
+        padding: 10px 12px;
+    }
+
+    input::placeholder {
+        font-size: 16px;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(0.6);
+    }
+
+    .btn-history {
+        font-size: 1rem;
+        padding: 10px 0;
+    }
+
+    .btn-chart {
+        font-size: 1rem;
+        padding: 10px 0;
+    }
+
+    .btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .btn-income, .btn-reset {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    .balance-amount {
+        font-size: 3rem;
+    }
+
+    .summary {
+        padding: 16px;
+    }
+
+    .summary-label {
+        font-size: 1rem;
+    }
+
+    .summary-row {
+        font-size: 1rem;
+        margin-top: 6px;
+    }
+
+    .summary-income,
+    .summary-expense {
+        font-size: 1rem;
+    }
+
+    .summary-income-label,
+    .summary-expense-label {
+        font-size: 1rem;
+    }
+
+    .summary-start-row {
+        font-size: 1rem;
+        margin-top: 6px;
+    }
+
+    .summary-start-value {
+        font-size: 1.4rem;
+    }
+
+    .transaction-item {
+        padding: 12px 14px;
+    }
+
+    .transaction-title {
+        font-size: 1rem;
+    }
+
+    .transaction-meta {
+        font-size: 0.85rem;
+    }
+
+    .transaction-amount {
+        font-size: 1.1rem;
+    }
+
+    .transaction-delete {
+        font-size: 16px;
+        padding: 4px 6px;
+    }
+
+    #nav {
+        padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+
+    .nav-btn {
+        padding: 6px 0 4px;
+        font-size: 0.65rem;
+    }
+
+    .nav-icon {
+        font-size: 1.2rem;
+    }
+
+    .nav-label {
+        font-size: 0.65rem;
+    }
+
+    .modal-sheet {
+        border-radius: 16px 16px 0 0;
+    }
+
+    .modal-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .modal-total {
+        font-size: 1.6rem;
+        padding: 12px 16px;
+    }
+
+    body {
+        padding-bottom: 64px;
+    }
+
+    .screen.active {
+        height: calc(100vh - 64px);
+    }
+
+    .set-start-area {
+        gap: 6px;
+    }
+
+    .chart-bars {
+        height: 200px;
+        gap: 24px;
+    }
+
+    .chart-col {
+        width: 70px;
+    }
+
+    .chart-bar {
+        width: 60px;
+    }
+
+    .chart-val {
+        font-size: 1.2rem;
+        width: 100px;
+    }
+
+    .chart-label {
+        font-size: 0.9rem;
+    }
+
+    .chart-container {
+        padding: 16px;
+    }
+
+    .modal-totals {
+        gap: 8px;
+        padding: 12px 16px;
+    }
+
+    .modal-total-inline {
+        padding: 8px;
+    }
+
+    .modal-total-label {
+        font-size: 0.8rem;
+    }
+
+    .modal-total-val {
+        font-size: 1.3rem;
+    }
+}
