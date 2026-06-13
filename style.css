@@ -825,28 +825,28 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* === Адаптив для смартфонов === */
 @media (max-width: 480px) {
     .amount-display {
-        padding: 2px 0;
+        padding: 4px 0;
         flex: 0;
     }
 
     .amount-sign {
-        font-size: 1.5rem;
+        font-size: 3rem;
     }
 
     .amount-text {
-        font-size: 2rem;
-        min-height: 2.2rem;
+        font-size: 4rem;
+        min-height: 4.4rem;
     }
 
     .amount-currency {
-        font-size: 1.2rem;
+        font-size: 2.4rem;
     }
 
     .amount-display-expense,
     .amount-display-income {
-        margin: 4px 8px;
-        padding: 4px;
-        border-width: 2px;
+        margin: 8px 8px;
+        padding: 8px;
+        border-width: 3px;
     }
 
     .numpad-btn {
@@ -982,16 +982,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
 
     .nav-btn {
-        padding: 4px 0 2px;
-        font-size: 0.6rem;
+        padding: 10px 0 6px;
+        font-size: 1.2rem;
     }
 
     .nav-icon {
-        font-size: 1rem;
+        font-size: 2rem;
     }
 
     .nav-label {
-        font-size: 0.6rem;
+        font-size: 1.2rem;
+        font-weight: 900;
+        text-transform: uppercase;
     }
 
     .modal-sheet {
@@ -1008,11 +1010,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
 
     body {
-        padding-bottom: 50px;
+        padding-bottom: 100px;
     }
 
     .screen.active {
-        height: calc(100vh - 50px);
+        height: calc(100vh - 100px);
     }
 
     .set-start-area {
