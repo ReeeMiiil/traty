@@ -1,0 +1,823 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #000000;
+    --surface: #1c1c1e;
+    --surface2: #2c2c2e;
+    --surface3: #3a3a3c;
+    --separator: #38383a;
+    --text: #ffffff;
+    --text2: #8e8e93;
+    --accent: #ff453a;
+    --success: #30d158;
+    --danger: #ff453a;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 140px;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    padding: 16px 20px 8px;
+    letter-spacing: -0.02em;
+}
+
+h2.list-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 12px 0 4px;
+    letter-spacing: -0.01em;
+}
+
+/* Экраны */
+.screen {
+    display: none;
+    padding: 0 16px 16px;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 140px);
+}
+
+/* Дисплей суммы */
+.amount-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 0;
+    gap: 4px;
+}
+
+.amount-sign {
+    font-size: 7rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+.expense-sign {
+    color: var(--accent);
+}
+
+.income-sign {
+    color: var(--success);
+}
+
+.amount-text {
+    font-size: 8.4rem;
+    font-weight: 700;
+    min-height: 9rem;
+    line-height: 1;
+    word-break: break-all;
+    letter-spacing: -0.03em;
+}
+
+.amount-display-expense {
+    border: 6px solid var(--accent);
+    border-radius: 20px;
+    padding: 12px;
+    margin: 25px 20px;
+}
+
+.amount-display-income {
+    border: 6px solid var(--success);
+    border-radius: 20px;
+    padding: 12px;
+    margin: 25px 20px;
+}
+
+/* Анимация суммы при подтверждении */
+@keyframes flyUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-120px); opacity: 0; }
+}
+
+@keyframes dropDown {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(120px); opacity: 0; }
+}
+
+.amount-display.fly-up {
+    animation: flyUp 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+.amount-display.drop-down {
+    animation: dropDown 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+/* Цвет суммы на экране траты */
+#screen-expense .amount-text {
+    color: var(--accent);
+}
+
+/* Цвет суммы на экране дохода */
+#screen-income .amount-text {
+    color: var(--success);
+}
+
+.amount-currency {
+    font-size: 5rem;
+    font-weight: 600;
+    color: var(--text2);
+    margin-left: 4px;
+}
+
+/* Поля ввода */
+.input-group {
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    padding: 14px 16px;
+    border: none;
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 32px;
+    outline: none;
+    transition: background 0.2s;
+}
+
+input:focus {
+    background: var(--surface2);
+}
+
+input::placeholder {
+    color: var(--text2);
+    font-size: 32px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.6);
+}
+
+/* Цифровая клавиатура — стиль Apple Calculator */
+.numpad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: auto;
+}
+
+.numpad-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: min(300px, 55vw);
+    height: min(180px, 32vw);
+    margin: 0 auto;
+    border: none;
+    border-radius: 100px;
+    background: var(--surface3);
+    color: var(--text);
+    font-size: 4.8rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background 0.12s, transform 0.1s, opacity 0.12s;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.numpad-btn:active {
+    opacity: 0.6;
+    transform: scale(0.96);
+}
+
+.numpad-zero {
+    font-size: 4rem;
+    font-weight: 500;
+    color: var(--text);
+    border-radius: 100px;
+    width: min(300px, 55vw);
+    height: min(180px, 32vw);
+}
+
+.numpad-dot {
+    font-size: 6rem;
+    font-weight: 400;
+}
+
+.numpad-back {
+    color: var(--text2);
+    font-size: 4.4rem;
+    background: var(--surface2);
+}
+
+.numpad-ok {
+    color: #fff;
+    font-size: 4.8rem;
+    font-weight: 700;
+}
+
+#numpad-expense .numpad-ok {
+    background: var(--accent);
+}
+
+#numpad-income .numpad-ok {
+    background: var(--success);
+}
+
+/* Кнопка истории */
+.btn-history {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    margin-bottom: 8px;
+    border: none;
+    border-radius: 12px;
+    font-size: 2.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    text-align: center;
+    letter-spacing: -0.01em;
+}
+
+.btn-history:active {
+    opacity: 0.7;
+    transform: scale(0.97);
+}
+
+.btn-history-expense {
+    background: rgba(255, 69, 58, 0.12);
+    color: var(--accent);
+}
+
+.btn-history-income {
+    background: rgba(48, 209, 88, 0.12);
+    color: var(--success);
+}
+
+/* Экран остатка */
+#screen-balance {
+    display: none;
+    padding: 0 16px 16px;
+}
+
+#screen-balance.active {
+    display: block;
+}
+
+.summary {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 16px;
+}
+
+.balance-amount {
+    font-size: 8.8rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+}
+
+.balance-amount.positive {
+    color: var(--success);
+}
+
+.balance-amount.negative {
+    color: var(--danger);
+}
+
+.summary-label {
+    font-size: 2.4rem;
+    color: var(--text2);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-size: 2.8rem;
+    font-weight: 400;
+}
+
+.summary-income {
+    font-weight: 700;
+    color: var(--success);
+    font-size: 2.8rem;
+}
+
+.summary-income-label {
+    color: var(--text2);
+    font-size: 2.8rem;
+}
+
+.summary-expense {
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 2.8rem;
+}
+
+.summary-expense-label {
+    color: var(--text2);
+    font-size: 2.8rem;
+}
+
+.summary-start-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-size: 2.8rem;
+}
+
+.summary-start-value {
+    font-weight: 700;
+    font-size: 3.6rem;
+    color: var(--text);
+}
+
+.set-start-area {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.set-start-area .input-group {
+    margin-bottom: 0;
+    flex: 1;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 28px;
+    border: none;
+    border-radius: 12px;
+    font-size: 32px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    letter-spacing: -0.01em;
+}
+
+.btn:active {
+    opacity: 0.7;
+    transform: scale(0.97);
+}
+
+.btn-income {
+    background: var(--success);
+    color: #fff;
+    width: auto;
+    padding: 28px 40px;
+    white-space: nowrap;
+    font-size: 32px;
+}
+
+.btn-reset {
+    background: var(--accent);
+    color: #fff;
+    width: auto;
+    padding: 28px 40px;
+    white-space: nowrap;
+    font-size: 32px;
+}
+
+/* Список */
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.transaction-item {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 32px 36px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    transition: background 0.15s;
+}
+
+.transaction-item:active {
+    background: var(--surface2);
+}
+
+.transaction-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.transaction-title {
+    font-weight: 600;
+    font-size: 2.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.transaction-meta {
+    font-size: 2.2rem;
+    color: var(--text2);
+    margin-top: 6px;
+}
+
+.transaction-amount {
+    font-weight: 700;
+    font-size: 4rem;
+    white-space: nowrap;
+    letter-spacing: -0.02em;
+}
+
+.transaction-amount.expense {
+    color: var(--accent);
+}
+
+.transaction-amount.income {
+    color: var(--success);
+}
+
+.transaction-delete {
+    background: none;
+    border: none;
+    color: var(--text2);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 10px;
+    transition: color 0.15s, background 0.15s;
+}
+
+.transaction-delete:active {
+    color: var(--danger);
+    background: rgba(255, 69, 58, 0.12);
+}
+
+/* Навигация — стиль Apple tab bar */
+#nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    background: rgba(28, 28, 30, 0.88);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-top: 0.5px solid var(--separator);
+    z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0 12px;
+    background: none;
+    border: none;
+    color: var(--text2);
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.nav-btn.active {
+    color: var(--text);
+}
+
+.nav-icon {
+    font-size: 2.8rem;
+    margin-bottom: 4px;
+}
+
+.nav-label {
+    font-weight: 900;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+}
+
+.nav-btn[data-screen="expense"] .nav-label,
+.nav-btn[data-screen="expense"] .nav-icon {
+    color: var(--accent);
+}
+
+.nav-btn[data-screen="income"] .nav-label,
+.nav-btn[data-screen="income"] .nav-icon {
+    color: var(--success);
+}
+
+/* Пустое состояние */
+.empty {
+    text-align: center;
+    color: var(--text2);
+    padding: 48px 16px;
+    font-size: 1rem;
+}
+
+/* Уведомление — стиль Apple */
+.toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface2);
+    color: var(--text);
+    padding: 12px 28px;
+    border-radius: 24px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.25s, transform 0.25s;
+    z-index: 200;
+    pointer-events: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast.toast-expense {
+    background: rgba(255, 69, 58, 0.85);
+    color: #fff;
+}
+
+/* Модальное окно истории */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 300;
+    justify-content: center;
+    align-items: flex-end;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.modal-overlay.open {
+    display: flex;
+}
+
+.modal-sheet {
+    width: 100%;
+    max-height: 85vh;
+    background: var(--surface);
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 0.5px solid var(--separator);
+}
+
+.modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.modal-close {
+    background: var(--surface3);
+    border: none;
+    color: var(--text2);
+    font-size: 1.2rem;
+    padding: 8px 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: 600;
+    min-width: 36px;
+}
+
+.modal-close:active {
+    opacity: 0.6;
+}
+
+.modal-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.modal-total {
+    padding: 18px 20px;
+    border-top: 0.5px solid var(--separator);
+    font-size: 2.4rem;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: -0.03em;
+}
+
+.modal-total.expense {
+    color: var(--accent);
+}
+
+.modal-total.income {
+    color: var(--success);
+}
+
+/* Итоги в модальной общей истории */
+.modal-totals {
+    display: flex;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 0.5px solid var(--separator);
+}
+
+.modal-total-inline {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.modal-total-inline.income {
+    background: rgba(48, 209, 88, 0.12);
+}
+
+.modal-total-inline.expense {
+    background: rgba(255, 69, 58, 0.12);
+}
+
+.modal-total-label {
+    display: block;
+    font-size: 1.2rem;
+    color: var(--text2);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.modal-total-val {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.modal-total-inline.income .modal-total-val {
+    color: var(--success);
+}
+
+.modal-total-inline.expense .modal-total-val {
+    color: var(--accent);
+}
+
+/* Кнопки истории на экране остатка */
+.balance-history-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.balance-history-btns .btn-history {
+    margin-bottom: 0;
+}
+
+/* Кнопка графика */
+.btn-chart {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: rgba(142, 142, 147, 0.12);
+    color: var(--text);
+    transition: opacity 0.15s, transform 0.1s;
+    letter-spacing: -0.01em;
+}
+
+.btn-chart:active {
+    opacity: 0.7;
+    transform: scale(0.97);
+}
+
+/* График */
+.chart-container {
+    padding: 24px 20px 32px;
+}
+
+.chart-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 40px;
+    height: 300px;
+}
+
+.chart-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+}
+
+.chart-bar {
+    width: 80px;
+    border-radius: 12px 12px 4px 4px;
+    transition: height 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+    min-height: 4px;
+}
+
+.chart-bar-income {
+    background: var(--success);
+}
+
+.chart-bar-expense {
+    background: var(--accent);
+}
+
+.chart-label {
+    margin-top: 12px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+}
+
+.chart-values {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 16px;
+}
+
+.chart-val {
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-align: center;
+    width: 140px;
+}
+
+.chart-val-income {
+    color: var(--success);
+}
+
+.chart-val-expense {
+    color: var(--accent);
+}
+
+/* Фильтр по месяцу */
+.month-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.month-nav button {
+    background: var(--surface3);
+    border: none;
+    color: var(--text);
+    font-size: 1.2rem;
+    padding: 10px 16px;
+    border-radius: 50%;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.month-nav button:active {
+    opacity: 0.6;
+}
+
+.month-nav .month-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: -0.01em;
+}

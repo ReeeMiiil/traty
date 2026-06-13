@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>Траты</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Экран траты -->
+    <div id="screen-expense" class="screen active">
+        <div class="amount-display amount-display-expense">
+            <span class="amount-sign expense-sign">−</span>
+            <span id="expense-amount-text" class="amount-text">0</span>
+            <span class="amount-currency">₽</span>
+        </div>
+        <div class="input-group">
+            <input type="date" id="expense-date" required>
+        </div>
+        <div class="input-group">
+            <input type="text" id="expense-note" placeholder="Заметка" maxlength="100">
+        </div>
+        <button class="btn-history btn-history-expense" data-type="expense">📋 История трат</button>
+        <div class="numpad" id="numpad-expense">
+            <button class="numpad-btn" data-val="1">1</button>
+            <button class="numpad-btn" data-val="2">2</button>
+            <button class="numpad-btn" data-val="3">3</button>
+            <button class="numpad-btn" data-val="4">4</button>
+            <button class="numpad-btn" data-val="5">5</button>
+            <button class="numpad-btn" data-val="6">6</button>
+            <button class="numpad-btn" data-val="7">7</button>
+            <button class="numpad-btn" data-val="8">8</button>
+            <button class="numpad-btn" data-val="9">9</button>
+            <button class="numpad-btn numpad-zero" data-val="000">000</button>
+            <button class="numpad-btn" data-val="0">0</button>
+            <button class="numpad-btn numpad-dot" data-val=".">.</button>
+            <button class="numpad-btn numpad-back" data-val="back">⌫</button>
+            <button class="numpad-btn numpad-ok" data-val="ok">✓</button>
+        </div>
+    </div>
+
+    <!-- Экран дохода -->
+    <div id="screen-income" class="screen">
+        <div class="amount-display amount-display-income">
+            <span class="amount-sign income-sign">+</span>
+            <span id="income-amount-text" class="amount-text">0</span>
+            <span class="amount-currency">₽</span>
+        </div>
+        <div class="input-group">
+            <input type="date" id="income-date" required>
+        </div>
+        <div class="input-group">
+            <input type="text" id="income-note" placeholder="Заметка" maxlength="100">
+        </div>
+        <button class="btn-history btn-history-income" data-type="income">📋 История доходов</button>
+        <div class="numpad" id="numpad-income">
+            <button class="numpad-btn" data-val="1">1</button>
+            <button class="numpad-btn" data-val="2">2</button>
+            <button class="numpad-btn" data-val="3">3</button>
+            <button class="numpad-btn" data-val="4">4</button>
+            <button class="numpad-btn" data-val="5">5</button>
+            <button class="numpad-btn" data-val="6">6</button>
+            <button class="numpad-btn" data-val="7">7</button>
+            <button class="numpad-btn" data-val="8">8</button>
+            <button class="numpad-btn" data-val="9">9</button>
+            <button class="numpad-btn numpad-zero" data-val="000">000</button>
+            <button class="numpad-btn" data-val="0">0</button>
+            <button class="numpad-btn numpad-dot" data-val=".">.</button>
+            <button class="numpad-btn numpad-back" data-val="back">⌫</button>
+            <button class="numpad-btn numpad-ok" data-val="ok">✓</button>
+        </div>
+    </div>
+
+    <!-- Экран остатка -->
+    <div id="screen-balance" class="screen">
+        <h1>Остаток</h1>
+        <div id="balance-card" class="summary"></div>
+        <div id="set-start-area" class="set-start-area">
+            <div class="input-group">
+                <input type="number" id="input-start-amount" placeholder="Начальная сумма ₽" step="0.01" min="0">
+            </div>
+            <button class="btn btn-income" id="btn-set-start">Задать</button>
+            <button class="btn btn-reset" id="btn-reset-start">Сброс</button>
+        </div>
+        <button class="btn-chart" id="btn-chart">📊 График</button>
+        <button class="btn-history" id="btn-balance-history" style="background:rgba(142,142,147,0.12);color:var(--text);">📋 История</button>
+        </div>
+        <h2 class="list-title">История</h2>
+        <div id="balance-list" class="list"></div>
+    </div>
+
+    <!-- Навигация -->
+    <nav id="nav">
+        <button class="nav-btn active" data-screen="expense">
+            <span class="nav-icon">−</span>
+            <span class="nav-label">Трата</span>
+        </button>
+        <button class="nav-btn" data-screen="income">
+            <span class="nav-icon">+</span>
+            <span class="nav-label">Доход</span>
+        </button>
+        <button class="nav-btn" data-screen="balance">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Остаток</span>
+        </button>
+    </nav>
+
+    <!-- Модальная история -->
+    <div id="history-modal" class="modal-overlay">
+        <div class="modal-sheet">
+            <div class="modal-header">
+                <h2 id="history-title">История</h2>
+                <button class="modal-close" id="btn-close-history">✕</button>
+            </div>
+            <div id="history-list" class="modal-list"></div>
+            <div id="history-total" class="modal-total"></div>
+        </div>
+    </div>
+
+    <!-- Модальная общая история -->
+    <div id="balance-history-modal" class="modal-overlay">
+        <div class="modal-sheet">
+            <div class="modal-header">
+                <h2>История</h2>
+                <button class="modal-close" id="btn-close-balance-history">✕</button>
+            </div>
+            <div class="modal-totals">
+                <div class="modal-total-inline income">
+                    <span class="modal-total-label">Доходы</span>
+                    <span id="balance-hist-income" class="modal-total-val">+0 ₽</span>
+                </div>
+                <div class="modal-total-inline expense">
+                    <span class="modal-total-label">Траты</span>
+                    <span id="balance-hist-expense" class="modal-total-val">−0 ₽</span>
+                </div>
+            </div>
+            <div id="balance-history-list" class="modal-list"></div>
+        </div>
+    </div>
+
+    <!-- Модальный график -->
+    <div id="chart-modal" class="modal-overlay">
+        <div class="modal-sheet">
+            <div class="modal-header">
+                <h2>Общий график</h2>
+                <button class="modal-close" id="btn-close-chart">✕</button>
+            </div>
+            <div class="chart-container">
+                <div class="chart-bars">
+                    <div class="chart-col">
+                        <div id="chart-bar-income" class="chart-bar chart-bar-income"></div>
+                        <div class="chart-label">Доходы</div>
+                    </div>
+                    <div class="chart-col">
+                        <div id="chart-bar-expense" class="chart-bar chart-bar-expense"></div>
+                        <div class="chart-label">Траты</div>
+                    </div>
+                </div>
+                <div class="chart-values">
+                    <div id="chart-income-val" class="chart-val chart-val-income"></div>
+                    <div id="chart-expense-val" class="chart-val chart-val-expense"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
