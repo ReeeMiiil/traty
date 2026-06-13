@@ -1,64 +1,32 @@
 (function () {
     'use strict';
 
-    // --- Данные ---
-    var transactions = [];
-    var startAmount = 0;
+    // --- Хранилище (localStorage) ---
+    var STORAGE_TRANSACTIONS = 'traty_transactions';
+    var STORAGE_START = 'traty_start_amount';
 
-    // Загрузка с сервера при старте
-    function loadData() {
-        return fetch('/api/data')
-            .then(function (r) { return r.json(); })
-            .then(function (data) {
-                transactions = data.transactions || [];
-                startAmount = data.startAmount || 0;
-            })
-            .catch(function () {
-                // Фоллбэк на localStorage если сервер недоступен
-                try {
-                    transactions = JSON.parse(localStorage.getItem('traty_transactions')) || [];
-                } catch { transactions = []; }
-                startAmount = parseFloat(localStorage.getItem('traty_start_amount')) || 0;
-            });
+    function loadTransactions() {
+        try {
+            return JSON.parse(localStorage.getItem(STORAGE_TRANSACTIONS)) || [];
+        } catch (e) {
+            return [];
+        }
     }
 
-    // --- API запросы ---
-    function apiAddTransaction(t) {
-        return fetch('/api/transaction', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(t)
-        }).then(function (r) { return r.json(); }).then(function (res) {
-            t.id = res.id;
-            // Дублируем в localStorage как бэкап
-            localStorage.setItem('traty_transactions', JSON.stringify(transactions));
-            return res;
-        }).catch(function () {
-            localStorage.setItem('traty_transactions', JSON.stringify(transactions));
-        });
+    function saveTransactions() {
+        localStorage.setItem(STORAGE_TRANSACTIONS, JSON.stringify(transactions));
     }
 
-    function apiDeleteTransaction(id) {
-        return fetch('/api/transaction/' + id, {
-            method: 'DELETE'
-        }).then(function () {
-            localStorage.setItem('traty_transactions', JSON.stringify(transactions));
-        }).catch(function () {
-            localStorage.setItem('traty_transactions', JSON.stringify(transactions));
-        });
+    function loadStartAmount() {
+        return parseFloat(localStorage.getItem(STORAGE_START)) || 0;
     }
 
-    function apiSetStartAmount(amount) {
-        return fetch('/api/start-amount', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount: amount })
-        }).then(function () {
-            localStorage.setItem('traty_start_amount', amount);
-        }).catch(function () {
-            localStorage.setItem('traty_start_amount', amount);
-        });
+    function saveStartAmount() {
+        localStorage.setItem(STORAGE_START, String(startAmount));
     }
+
+    var transactions = loadTransactions();
+    var startAmount = loadStartAmount();
 
     // --- Навигация ---
     var navBtns = document.querySelectorAll('.nav-btn');
@@ -149,16 +117,14 @@
 
     // --- Трата ---
     var numpadExpense = new Numpad('numpad-expense', 'expense-amount-text', function (amount) {
-        var t = {
+        transactions.push({
             id: Date.now(),
             type: 'expense',
             amount: amount,
             date: document.getElementById('expense-date').value,
             note: document.getElementById('expense-note').value.trim()
-        };
-        transactions.push(t);
-        apiAddTransaction(t);
-
+        });
+        saveTransactions();
         document.getElementById('expense-note').value = '';
         document.getElementById('expense-date').value = todayStr();
         showToast('−' + formatMoney(amount) + ' ₽', 'expense');
@@ -166,16 +132,14 @@
 
     // --- Доход ---
     var numpadIncome = new Numpad('numpad-income', 'income-amount-text', function (amount) {
-        var t = {
+        transactions.push({
             id: Date.now(),
             type: 'income',
             amount: amount,
             date: document.getElementById('income-date').value,
             note: document.getElementById('income-note').value.trim()
-        };
-        transactions.push(t);
-        apiAddTransaction(t);
-
+        });
+        saveTransactions();
         document.getElementById('income-note').value = '';
         document.getElementById('income-date').value = todayStr();
         showToast('+' + formatMoney(amount) + ' ₽', 'income');
@@ -189,7 +153,7 @@
         var val = parseFloat(inputStartAmount.value);
         if (!val || val < 0) return;
         startAmount = val;
-        apiSetStartAmount(startAmount);
+        saveStartAmount();
         inputStartAmount.value = '';
         renderBalance();
         showToast('Начальная сумма: ' + formatMoney(startAmount) + ' ₽');
@@ -199,10 +163,56 @@
     var btnResetStart = document.getElementById('btn-reset-start');
     btnResetStart.addEventListener('click', function () {
         startAmount = 0;
-        apiSetStartAmount(0);
+        saveStartAmount();
         inputStartAmount.value = '';
         renderBalance();
         showToast('Начальная сумма сброшена');
+    });
+
+    // --- Экспорт / Импорт ---
+    var btnExport = document.getElementById('btn-export');
+    var btnImport = document.getElementById('btn-import');
+    var importFile = document.getElementById('import-file');
+
+    btnExport.addEventListener('click', function () {
+        var data = JSON.stringify({ transactions: transactions, startAmount: startAmount }, null, 2);
+        var blob = new Blob([data], { type: 'application/json' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'traty_backup_' + todayStr() + '.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Бэкап сохранён');
+    });
+
+    btnImport.addEventListener('click', function () {
+        importFile.click();
+    });
+
+    importFile.addEventListener('change', function () {
+        var file = importFile.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            try {
+                var data = JSON.parse(e.target.result);
+                if (data.transactions) {
+                    transactions = data.transactions;
+                    startAmount = data.startAmount || 0;
+                    saveTransactions();
+                    saveStartAmount();
+                    renderBalance();
+                    showToast('Данные восстановлены');
+                } else {
+                    showToast('Неверный формат файла');
+                }
+            } catch (err) {
+                showToast('Ошибка чтения файла');
+            }
+        };
+        reader.readAsText(file);
+        importFile.value = '';
     });
 
     var viewYear = new Date().getFullYear();
@@ -301,7 +311,7 @@
                 e.stopPropagation();
                 var id = Number(btn.dataset.id);
                 transactions = transactions.filter(function (t) { return t.id !== id; });
-                apiDeleteTransaction(id);
+                saveTransactions();
                 renderBalance();
                 showToast('Удалено');
             });
@@ -346,7 +356,7 @@
                     e.stopPropagation();
                     var id = Number(btn.dataset.id);
                     transactions = transactions.filter(function (t) { return t.id !== id; });
-                    apiDeleteTransaction(id);
+                    saveTransactions();
                     openHistory(type);
                     showToast('Удалено');
                 });
@@ -405,7 +415,7 @@
                     e.stopPropagation();
                     var id = Number(btn.dataset.id);
                     transactions = transactions.filter(function (t) { return t.id !== id; });
-                    apiDeleteTransaction(id);
+                    saveTransactions();
                     openBalanceHistory();
                     showToast('Удалено');
                 });
@@ -459,13 +469,13 @@
     function formatMoney(n) {
         var str = n.toFixed(2).replace(/\.?0+$/, '');
         var parts = str.split('.');
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
         return parts.join('.');
     }
 
     function formatInput(val) {
         var parts = val.split('.');
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
         return parts.join('.');
     }
 
@@ -494,8 +504,6 @@
         setTimeout(function () { toast.classList.remove('show'); }, 1500);
     }
 
-    // --- Старт: загрузка данных с сервера ---
-    loadData().then(function () {
-        renderBalance();
-    });
+    // --- Старт ---
+    renderBalance();
 })();

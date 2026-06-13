@@ -702,6 +702,42 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     margin-bottom: 0;
 }
 
+/* Экспорт / Импорт */
+.export-import-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.btn-export, .btn-import {
+    flex: 1;
+    padding: 10px 0;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn-export {
+    background: rgba(142, 142, 147, 0.15);
+    color: var(--text);
+}
+
+.btn-export:active {
+    opacity: 0.7;
+}
+
+.btn-import {
+    background: rgba(48, 209, 88, 0.15);
+    color: var(--success);
+}
+
+.btn-import:active {
+    opacity: 0.7;
+}
+
 /* Кнопка графика */
 .btn-chart {
     display: block;
