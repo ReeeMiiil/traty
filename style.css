@@ -825,41 +825,41 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* === Адаптив для смартфонов === */
 @media (max-width: 480px) {
     .amount-display {
-        padding: 8px 0;
+        padding: 4px 0;
     }
 
     .amount-sign {
-        font-size: 2.4rem;
+        font-size: 2rem;
     }
 
     .amount-text {
-        font-size: 3.5rem;
-        min-height: 4rem;
+        font-size: 3rem;
+        min-height: 3.5rem;
     }
 
     .amount-currency {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
 
     .amount-display-expense,
     .amount-display-income {
-        margin: 10px 8px;
-        padding: 8px;
+        margin: 6px 8px;
+        padding: 6px;
         border-width: 3px;
     }
 
     .numpad-btn {
         width: min(80px, 26vw);
-        height: min(60px, 18vw);
-        border-radius: 20px;
+        height: min(50px, 14vw);
+        border-radius: 16px;
         font-size: 1.4rem;
     }
 
     .numpad-zero {
         font-size: 1.2rem;
         width: min(80px, 26vw);
-        height: min(60px, 18vw);
-        border-radius: 20px;
+        height: min(50px, 14vw);
+        border-radius: 16px;
     }
 
     .numpad-dot {
@@ -875,12 +875,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
 
     .numpad {
-        gap: 6px;
+        gap: 4px;
     }
 
     input {
         font-size: 16px;
-        padding: 10px 12px;
+        padding: 8px 12px;
     }
 
     input::placeholder {
@@ -891,81 +891,88 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         filter: invert(0.6);
     }
 
+    .input-group {
+        margin-bottom: 4px;
+    }
+
     .btn-history {
         font-size: 1rem;
-        padding: 10px 0;
+        padding: 8px 0;
+        margin-bottom: 4px;
     }
 
     .btn-chart {
         font-size: 1rem;
-        padding: 10px 0;
+        padding: 8px 0;
+        margin-bottom: 8px;
     }
 
     .btn {
-        padding: 12px;
+        padding: 10px;
         font-size: 14px;
     }
 
     .btn-income, .btn-reset {
-        padding: 12px 16px;
+        padding: 10px 14px;
         font-size: 14px;
     }
 
     .balance-amount {
-        font-size: 3rem;
+        font-size: 2.6rem;
     }
 
     .summary {
-        padding: 16px;
+        padding: 14px;
+        margin-bottom: 10px;
     }
 
     .summary-label {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
     .summary-row {
-        font-size: 1rem;
-        margin-top: 6px;
+        font-size: 0.95rem;
+        margin-top: 4px;
     }
 
     .summary-income,
     .summary-expense {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .summary-income-label,
     .summary-expense-label {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .summary-start-row {
-        font-size: 1rem;
-        margin-top: 6px;
+        font-size: 0.95rem;
+        margin-top: 4px;
     }
 
     .summary-start-value {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
     }
 
     .transaction-item {
-        padding: 12px 14px;
+        padding: 10px 12px;
     }
 
     .transaction-title {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .transaction-meta {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
 
     .transaction-amount {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
     .transaction-delete {
-        font-size: 16px;
-        padding: 4px 6px;
+        font-size: 14px;
+        padding: 2px 4px;
     }
 
     #nav {
@@ -973,16 +980,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
 
     .nav-btn {
-        padding: 6px 0 4px;
-        font-size: 0.65rem;
+        padding: 4px 0 2px;
+        font-size: 0.6rem;
     }
 
     .nav-icon {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
 
     .nav-label {
-        font-size: 0.65rem;
+        font-size: 0.6rem;
     }
 
     .modal-sheet {
@@ -999,19 +1006,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
 
     body {
-        padding-bottom: 64px;
+        padding-bottom: 50px;
     }
 
     .screen.active {
-        height: calc(100vh - 64px);
+        height: calc(100vh - 50px);
     }
 
     .set-start-area {
-        gap: 6px;
+        gap: 4px;
     }
 
     .chart-bars {
-        height: 200px;
+        height: 160px;
         gap: 24px;
     }
 
@@ -1051,5 +1058,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
     .modal-total-val {
         font-size: 1.3rem;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+        padding: 8px 16px 4px;
+    }
+
+    h2.list-title {
+        font-size: 0.95rem;
+        padding: 6px 0 2px;
     }
 }
